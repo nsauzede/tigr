@@ -6,7 +6,10 @@
 
 int main(int argc, char* argv[]) {
     my03_t m = {.steps = 16};
-    Tigr* screen = tigrWindow(800, 600, "Hello", 0);
+    Tigr* screen = tigrWindow(800, 600, "Hello", 0
+        //| TIGR_FULLSCREEN
+        | TIGR_AUTO
+    );
     while (!tigrClosed(screen) && !tigrKeyDown(screen, TK_ESCAPE)) {
         if (tigrKeyDown(screen, 'A')) { m.bank = 0; }
         if (tigrKeyDown(screen, 'B')) { m.bank = 1; }
@@ -46,11 +49,15 @@ int main(int argc, char* argv[]) {
         for (int b = 0; b < sizeof(m.banks) / sizeof(m.banks[0]); b++) {
             for (int p = 0; p < sizeof(m.banks[b].patterns) / sizeof(m.banks[b].patterns[0]); p++) {
                 x = 0;
-                snprintf(buf, sizeof(buf), "b%d p%d", b, p);
+                snprintf(buf, sizeof(buf), "%s%d%s%d",
+                    b == m.bank ? "B" : "b",
+                    b,
+                    b == m.bank && p == m.pattern ? "P" : "p", p);
                 tigrPrint(screen, tfont, x, y, tigrRGB(0xff, 0xff, 0xff), buf);
                 x += tigrTextWidth(tfont, buf);
                 for (int s = 0; s < sizeof(m.banks[b].patterns[p].steps) / sizeof(m.banks[b].patterns[p].steps[0]); s++) {
-                    snprintf(buf, sizeof(buf), " %s%do%d%s%s",
+                    snprintf(buf, sizeof(buf), "%s%s%do%d%s%s",
+                        b == m.bank && p == m.pattern && s == m.step ? "=" : "-",
                         m.banks[b].patterns[p].steps[s].on_off ? "N" : "n",
                         m.banks[b].patterns[p].steps[s].note,
                         m.banks[b].patterns[p].steps[s].octave,

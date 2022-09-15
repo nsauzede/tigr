@@ -2,7 +2,8 @@
 #define MY03_H__
 
 typedef struct my03 {
-    int tempo;      // BPM 20-500 {140}
+    int run_stop;   // 0-1 {0}
+    int tempo;      // 20-500 {140} (BPM)
     int steps;      // 1-16 {16}
     int saw_squ;    // 1-0 {1}
     int tune, cutoff, reso, envmod, decay, accent;  // 0-100 {0}
